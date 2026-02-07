@@ -7,102 +7,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body, html {
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Poppins', sans-serif;
+        body, html { height: 100%; overflow: hidden; font-family: 'Poppins', sans-serif; background-color: #000; }
+
+        /* Overlay to Start Music */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: flex; align-items: center;
+            justify-content: center; z-index: 1000; color: white; flex-direction: column;
         }
 
-        /* Background Video */
+        #start-btn {
+            padding: 15px 40px; font-size: 1.5rem; background: #ff4d6d;
+            color: white; border: none; border-radius: 50px; cursor: pointer;
+        }
+
         #bg-video {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            object-fit: cover;
-            z-index: -1;
+            position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
+            object-fit: cover; z-index: -1;
         }
 
         .container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
+            height: 100vh; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; padding: 20px;
             background: rgba(0, 0, 0, 0.4);
         }
 
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            color: white;
-            animation: fadeInDown 2s ease;
-            margin-bottom: 20px;
-        }
-
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: white; margin-bottom: 20px; }
         .highlight { color: #00f2fe; text-shadow: 0 0 10px #00f2fe; }
-
-        .box {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
+        .box { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.3); }
         .btn-group { margin-top: 20px; position: relative; height: 60px; width: 250px; display: flex; justify-content: space-around; }
-
-        button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-yes { background: #ff4d6d; color: white; z-index: 10; }
-        .btn-no { background: #fff; color: #ff4d6d; position: absolute; transition: 0.1s; }
-
+        button { padding: 12px 30px; font-size: 1.1rem; border: none; border-radius: 25px; cursor: pointer; }
+        .btn-yes { background: #ff4d6d; color: white; }
+        .btn-no { background: #fff; color: #ff4d6d; position: absolute; }
         .hidden { display: none !important; }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .photo-frame {
-            width: 150px;
-            height: 150px;
-            border: 10px solid white;
-            border-image: url('frame.png') 30 stretch;
-            margin: 10px;
-            object-fit: cover;
-        }
-
-        #back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 5px 15px;
-            border-radius: 10px;
-        }
+        .photo-frame { width: 140px; height: 140px; border: 5px solid white; margin: 10px; object-fit: cover; border-radius: 10px; }
+        #back-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 10px; }
     </style>
 </head>
 <body>
+
+    <div id="overlay">
+        <h2 style="margin-bottom: 20px;">Ready for a surprise?</h2>
+        <button id="start-btn" onclick="startWebsite()">Click to Open ❤️</button>
+    </div>
 
     <video autoplay muted loop id="bg-video">
         <source src="video.mp4" type="video/mp4">
     </video>
 
-    <div id="page1" class="container">
+    <audio id="bg-music" src="bg_music.mp3" loop></audio>
+    <audio id="audio-yes" src="yes_sound.mp3"></audio>
+    <audio id="audio-no" src="no_sound.mp3"></audio>
+
+    <div id="page1" class="container hidden">
         <h1>Happy Valentine's Day My <span class="highlight">Bot</span> Kutti</h1>
         <div class="box">
             <h2>Will you marry me?</h2>
@@ -146,20 +103,19 @@
         <h2 style="color:white; margin-top:20px;">Ithokke oormma undo?</h2>
     </div>
 
-    <audio id="audio-yes" src="yes_sound.mp3"></audio>
-    <audio id="audio-no" src="no_sound.mp3"></audio>
-
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
+        function startWebsite() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('page1').classList.remove('hidden');
+            document.getElementById('bg-music').play();
+        }
+
         function moveButton(id) {
             const btn = document.getElementById(id);
-            const audioNo = document.getElementById('audio-no');
-            audioNo.play();
-            
-            // Random position inside the screen
+            document.getElementById('audio-no').play();
             const x = Math.random() * (window.innerWidth - btn.offsetWidth);
             const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
         }
@@ -167,8 +123,10 @@
         function nextPage(num) {
             document.querySelectorAll('.container').forEach(p => p.classList.add('hidden'));
             document.getElementById('page' + num).classList.remove('hidden');
-            if(num === 2) document.getElementById('audio-yes').play();
-            if(num === 2) document.getElementById('memories-btn').classList.remove('hidden');
+            if(num === 2) {
+                document.getElementById('audio-yes').play();
+                document.getElementById('memories-btn').classList.remove('hidden');
+            }
         }
 
         function prevPage(num) {
@@ -182,14 +140,7 @@
         }
 
         function celebrate() {
-            var duration = 5 * 1000;
-            var end = Date.now() + duration;
-
-            (function frame() {
-              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#ffb6c1'] });
-              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#ffb6c1'] });
-              if (Date.now() < end) requestAnimationFrame(frame);
-            }());
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ff0000', '#ffb6c1'] });
         }
     </script>
 </body>

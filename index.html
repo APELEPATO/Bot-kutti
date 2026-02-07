@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Bot Kutti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Background Video */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: white;
+            animation: fadeInDown 2s ease;
+            margin-bottom: 20px;
+        }
+
+        .highlight { color: #00f2fe; text-shadow: 0 0 10px #00f2fe; }
+
+        .box {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-group { margin-top: 20px; position: relative; height: 60px; width: 250px; display: flex; justify-content: space-around; }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-yes { background: #ff4d6d; color: white; z-index: 10; }
+        .btn-no { background: #fff; color: #ff4d6d; position: absolute; transition: 0.1s; }
+
+        .hidden { display: none !important; }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .photo-frame {
+            width: 150px;
+            height: 150px;
+            border: 10px solid white;
+            border-image: url('frame.png') 30 stretch;
+            margin: 10px;
+            object-fit: cover;
+        }
+
+        #back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 5px 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop id="bg-video">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <div id="page1" class="container">
+        <h1>Happy Valentine's Day My <span class="highlight">Bot</span> Kutti</h1>
+        <div class="box">
+            <h2>Will you marry me?</h2>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="nextPage(2)">Yes</button>
+                <button class="btn-no" id="no1" onmouseover="moveButton('no1')">No</button>
+            </div>
+            <button class="hidden" id="memories-btn" onclick="nextPage(3)" style="margin-top:20px; background:#4facfe; color:white;">Our Memories</button>
+        </div>
+    </div>
+
+    <div id="page2" class="container hidden">
+        <button id="back-btn" onclick="prevPage(1)">Back</button>
+        <h1>I love you so much Bot Kutti ummmmah😚♥️</h1>
+        <div class="box">
+            <h2>Enik oru ummma thero?</h2>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="showFinalKiss()">Yes</button>
+                <button class="btn-no" id="no2" onmouseover="moveButton('no2')">No</button>
+            </div>
+            <button id="final-kiss-btn" class="hidden" onclick="celebrate()" style="margin-top:20px; background:red; color:white;">ummmmah😚♥️</button>
+        </div>
+    </div>
+
+    <div id="page3" class="container hidden">
+        <button id="back-btn" onclick="prevPage(1)">Back</button>
+        <h2 style="color:white">Our Memories</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+            <img src="photo1.jpg" class="photo-frame">
+            <img src="photo2.jpg" class="photo-frame">
+            <img src="photo3.jpg" class="photo-frame">
+            <img src="photo4.jpg" class="photo-frame">
+            <img src="photo5.jpg" class="photo-frame">
+        </div>
+        <button onclick="nextPage(4)" style="margin-top:20px; background:#ff4d6d; color:white;">Surprise Gift for You</button>
+    </div>
+
+    <div id="page4" class="container hidden">
+        <button id="back-btn" onclick="prevPage(3)">Back</button>
+        <img src="special_photo.jpg" style="width: 250px; border-radius: 20px;">
+        <h2 style="color:white; margin-top:20px;">Ithokke oormma undo?</h2>
+    </div>
+
+    <audio id="audio-yes" src="yes_sound.mp3"></audio>
+    <audio id="audio-no" src="no_sound.mp3"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        function moveButton(id) {
+            const btn = document.getElementById(id);
+            const audioNo = document.getElementById('audio-no');
+            audioNo.play();
+            
+            // Random position inside the screen
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function nextPage(num) {
+            document.querySelectorAll('.container').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page' + num).classList.remove('hidden');
+            if(num === 2) document.getElementById('audio-yes').play();
+            if(num === 2) document.getElementById('memories-btn').classList.remove('hidden');
+        }
+
+        function prevPage(num) {
+            document.querySelectorAll('.container').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page' + num).classList.remove('hidden');
+        }
+
+        function showFinalKiss() {
+            document.getElementById('audio-yes').play();
+            document.getElementById('final-kiss-btn').classList.remove('hidden');
+        }
+
+        function celebrate() {
+            var duration = 5 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#ffb6c1'] });
+              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#ffb6c1'] });
+              if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>

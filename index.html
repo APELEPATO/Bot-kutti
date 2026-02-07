@@ -132,15 +132,21 @@
         </div>
     </div>
 
-    <div id="page3" class="container hidden">
+        <div id="page3" class="container hidden">
         <button id="back-btn" onclick="prevPage(1)">Back</button>
         <h2 style="color:white; margin-bottom: 20px;">Our Memories</h2>
         <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-height: 60vh; overflow-y: auto; padding: 10px;">
-            <img src="photo1.jpg?v=2" class="photo-frame">
-            <img src="photo2.jpg?v=2" class="photo-frame">
-            <img src="photo3.jpg?v=2" class="photo-frame">
-            <img src="photo4.jpg?v=2" class="photo-frame">
-            <img src="photo5.jpg?v=2" class="photo-frame">
+            
+            <img src="photo1.png" class="photo-frame" onerror="this.onerror=null; this.src='photo1.jpg';">
+            
+            <img src="photo2.png" class="photo-frame" onerror="this.onerror=null; this.src='photo2.jpg';">
+            
+            <img src="photo3.png" class="photo-frame" onerror="this.onerror=null; this.src='photo3.jpg';">
+            
+            <img src="photo4.png" class="photo-frame" onerror="this.onerror=null; this.src='photo4.jpg';">
+            
+            <img src="photo5.png" class="photo-frame" onerror="this.onerror=null; this.src='photo5.jpg';">
+            
         </div>
         <button onclick="nextPage(4)" style="margin-top:20px; background:#ff4d6d; color:white; width: 80%;">Surprise Gift for You</button>
     </div>
@@ -148,10 +154,11 @@
     <div id="page4" class="container hidden">
         <button id="back-btn" onclick="prevPage(3)">Back</button>
         <div class="box">
-            <img src="special_photo.jpg" style="width: 100%; max-width: 250px; border-radius: 15px; margin-bottom: 15px;">
+            <img src="special_photo.png" style="width: 100%; max-width: 250px; border-radius: 15px; margin-bottom: 15px;" onerror="this.onerror=null; this.src='special_photo.jpg';">
             <h2 style="color:white;">Ithokke oormma undo?</h2>
         </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>

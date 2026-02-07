@@ -14,10 +14,10 @@
         .container { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; background: rgba(0, 0, 0, 0.4); }
         h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: white; margin-bottom: 20px; }
         .box { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.3); z-index: 10; }
-        .photo-frame { width: 130px; height: 130px; border: 5px solid white; margin: 8px; object-fit: cover; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .photo-frame { width: 140px; height: 140px; border: 5px solid white; margin: 10px; object-fit: cover; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .hidden { display: none !important; }
         .btn-yes { background: #ff4d6d; color: white; padding: 12px 30px; border-radius: 25px; border:none; cursor:pointer; }
-        .btn-no { background: #fff; color: #ff4d6d; position: fixed; z-index: 2; padding: 12px 30px; border-radius: 25px; border:none; }
+        .btn-no { background: #fff; color: #ff4d6d; position: fixed; z-index: 100; padding: 12px 30px; border-radius: 25px; border:none; transition: 0.1s ease; }
     </style>
 </head>
 <body>
@@ -40,28 +40,26 @@
         <div class="box">
             <h2 style="color: white;">Will you marry me?</h2>
             <div style="margin-top:20px; height:100px; width:280px; position:relative; display:flex; justify-content:center; align-items:center;">
-                <button class="btn-yes" onclick="nextPage(2)">Yes</button>
-                <button class="btn-no" id="no1" onmouseover="moveButton('no1')">No</button>
+                <button class="btn-yes" onclick="nextPage(3)">Yes</button>
+                <button class="btn-no" id="no1" onmouseover="moveButton('no1')" onclick="moveButton('no1')">No</button>
             </div>
-            <button class="hidden" id="memories-btn" onclick="nextPage(3)" style="margin-top:20px; background:#4facfe; color:white; padding:10px 20px; border-radius:20px; border:none;">Our Memories</button>
         </div>
     </div>
 
     <div id="page3" class="container hidden">
-        <button onclick="prevPage(1)" style="position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:10px; border:none;">Back</button>
+        <button onclick="prevPage(1)" style="position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:10px; border:none; background:white; font-weight:bold;">Back</button>
         <h2 style="color:white; margin-bottom: 15px;">Our Memories</h2>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; max-height: 55vh; overflow-y: auto;">
-            <img src="photo1.jpg?v=99" class="photo-frame">
-            <img src="photo2.jpg?v=99" class="photo-frame">
-            
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px;">
+            <img src="photo1.jpg?v=101" class="photo-frame">
+            <img src="photo2.jpg?v=101" class="photo-frame">
         </div>
-        <button onclick="nextPage(4)" style="margin-top:20px; background:#ff4d6d; color:white; padding:12px 30px; border-radius:25px; border:none;">Special Gift</button>
+        <button onclick="nextPage(4)" style="margin-top:20px; background:#ff4d6d; color:white; padding:12px 30px; border-radius:25px; border:none; font-weight:bold;">Special Gift</button>
     </div>
 
     <div id="page4" class="container hidden">
-        <button onclick="prevPage(3)" style="position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:10px; border:none;">Back</button>
+        <button onclick="prevPage(3)" style="position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:10px; border:none; background:white; font-weight:bold;">Back</button>
         <div class="box">
-            <img src="special_photo.jpg?v=99" style="width: 250px; border-radius: 15px; margin-bottom: 15px;">
+            <img src="special_photo.jpg?v=101" style="width: 250px; border-radius: 15px; margin-bottom: 15px;">
             <h2 style="color:white;">Ithokke oormma undo?</h2>
         </div>
     </div>
@@ -71,25 +69,48 @@
         function startWebsite() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('page1').classList.remove('hidden');
-            document.getElementById('bg-music').play();
-            // Video force play
-            document.getElementById('bg-video').play();
+            
+            let bgMusic = document.getElementById('bg-music');
+            bgMusic.play().catch(e => console.log("Music error:", e));
+            
+            let bgVideo = document.getElementById('bg-video');
+            bgVideo.play().catch(e => console.log("Video error:", e));
         }
+
         function moveButton(id) {
             const btn = document.getElementById(id);
             document.getElementById('audio-no').play();
-            btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
-            btn.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+            
+            // Randomly move No button within screen
+            let x = Math.random() * (window.innerWidth - btn.offsetWidth - 40) + 20;
+            let y = Math.random() * (window.innerHeight - btn.offsetHeight - 40) + 20;
+            
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
         }
+
         function nextPage(num) {
             document.querySelectorAll('.container').forEach(p => p.classList.add('hidden'));
             document.getElementById('page' + num).classList.remove('hidden');
-            if(num === 2 || num === 3) document.getElementById('audio-yes').play();
-            if(num === 2) document.getElementById('memories-btn').classList.remove('hidden');
+            document.getElementById('audio-yes').play();
+            
+            if(num === 4) {
+                celebrate();
+            }
         }
+
         function prevPage(num) {
             document.querySelectorAll('.container').forEach(p => p.classList.add('hidden'));
             document.getElementById('page' + num).classList.remove('hidden');
+        }
+
+        function celebrate() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ffffff', '#ff0000']
+            });
         }
     </script>
 </body>
